@@ -1,6 +1,6 @@
 # Jira poller for DEVREG (fullsend v0.37.0).
 #
-# Manual only until a labeled test issue produces a dispatch record.
+# Manual only until a labeled issue produces a dispatch record.
 # Do not enable cron until that path is proven — the poller writes
 # entity properties on every issue it scans.
 name: fullsend Jira poll
@@ -53,7 +53,7 @@ jobs:
             --input-driver jira-poll \
             --jira-url "${JIRA_BASE_URL}" \
             --jira-project DEVREG \
-            --jql 'project = DEVREG AND labels = "fullsend-poll-test" AND statusCategory != Done ORDER BY updated DESC' \
+            --jql 'project = DEVREG AND labels = "fullsend" AND statusCategory != Done ORDER BY updated DESC' \
             --target-repo "${TARGET_REPO}" \
             --output dispatches.json \
             --fullsend-dir .fullsend
