@@ -182,9 +182,15 @@ case "${ISSUE_SOURCE}" in
       fi
     fi
     if [[ "${posted}" -ne 1 ]]; then
-      if gh issue comment "${ISSUE_KEY}" --repo "${REPO_FULL_NAME}" --body-file "${TMP_BODY}"; then
+      # Prepend the upsert marker so that a future fullsend CLI run
+      # (using --marker) can find and update this comment in-place.
+      tmp_fallback="$(mktemp)"
+      printf '%s\n' "${MARKER}" > "${tmp_fallback}"
+      cat "${TMP_BODY}" >> "${tmp_fallback}"
+      if gh issue comment "${ISSUE_KEY}" --repo "${REPO_FULL_NAME}" --body-file "${tmp_fallback}"; then
         posted=1
       fi
+      rm -f "${tmp_fallback}"
     fi
     ;;
   *)
