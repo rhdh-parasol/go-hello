@@ -94,7 +94,13 @@ if [[ -n "${OUTPUT_FILE}" ]]; then
 fi
 
 if [[ -z "${SUMMARY}" ]]; then
-  SUMMARY="⚠️ Refine agent produced no output. Check the [workflow run](${RUN_URL:-}) for logs."
+  echo "::error::Refine agent produced no output. See ${RUN_URL:-the workflow run}."
+  exit 1
+fi
+
+if printf '%s' "${SUMMARY}" | grep -qiE 'API Error:|policy_denied|is_api_error'; then
+  echo "::error::Refine inference failed (not posting to the ticket): ${SUMMARY:0:300}"
+  exit 1
 fi
 
 # Drop chain-of-thought if the agent ignored the "start at heading" rule.
@@ -107,8 +113,8 @@ fi
 
 SUMMARY="${SUMMARY:0:${MAX_BODY_CHARS}}"
 
-BODY="${MARKER}
-${SUMMARY}
+# --marker already injects MARKER; do not put it in the body (that doubled it).
+BODY="${SUMMARY}
 
 ---
 <sub>Posted by refine agent · [Run logs](${RUN_URL:-})</sub>"

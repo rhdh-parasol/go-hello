@@ -4,7 +4,7 @@ description: >-
   Decomposes a work item into implementable children and flags gaps.
   Triggered by /fs-refine on a Jira or GitHub issue.
 tools: Bash(jq,git,find,rg,ls,cat,head), Read, Glob, Grep
-model: opus
+model: sonnet
 skills:
   - refining
 ---
