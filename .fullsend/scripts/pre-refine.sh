@@ -15,11 +15,19 @@ ISSUE_KEY="${ISSUE_KEY:-}"
 ISSUE_SOURCE="${ISSUE_SOURCE:-}"
 HUMAN_INSTRUCTION="${HUMAN_INSTRUCTION:-}"
 REPO_FULL_NAME="${REPO_FULL_NAME:-}"
+META_FILE="${CONTEXT_DIR}/refine-meta.json"
 
 payload_get() {
   local query="$1"
   if [[ -f "${EVENT_FILE}" ]]; then
     jq -r "${query}" "${EVENT_FILE}" 2>/dev/null || true
+  fi
+}
+
+jira_key_from_url() {
+  local url="$1"
+  if [[ "${url}" =~ /browse/([A-Z][A-Z0-9]+-[0-9]+) ]]; then
+    printf '%s' "${BASH_REMATCH[1]}"
   fi
 }
 
@@ -34,6 +42,14 @@ if [[ -f "${EVENT_FILE}" ]]; then
   if [[ -z "${HUMAN_INSTRUCTION}" || "${HUMAN_INSTRUCTION}" == "none" ]]; then
     HUMAN_INSTRUCTION="$(payload_get '.transition.comment.instruction // empty')"
   fi
+  if [[ -z "${HUMAN_INSTRUCTION}" ]]; then
+    COMMENT_BODY="$(payload_get '.comment.body // empty')"
+    if [[ -n "${COMMENT_BODY}" ]]; then
+      HUMAN_INSTRUCTION="$(printf '%s' "${COMMENT_BODY}" \
+        | sed -E 's|^[[:space:]]*/fs-refine[[:space:]]*||' \
+        | sed -E 's|^[[:space:]]+||; s|[[:space:]]+$||')"
+    fi
+  fi
   if [[ -z "${REPO_FULL_NAME}" ]]; then
     REPO_FULL_NAME="$(payload_get '.repo // empty')"
   fi
@@ -42,14 +58,26 @@ if [[ -f "${EVENT_FILE}" ]]; then
   fi
 fi
 
-# GitHub work items have no entity.key; fall back to the numeric id.
+# v0.37 jira-poll writes a GitHub-shaped stub: issue.html_url is the browse
+# URL, issue.number is Jira's internal id (not PROJ-123). Never treat that
+# number as a GitHub issue.
 if [[ -z "${ISSUE_KEY}" || "${ISSUE_KEY}" == "null" ]]; then
-  ENTITY_ID="$(payload_get '.entity.id // .issue.number // empty')"
-  if [[ "${ENTITY_ID}" =~ ^[1-9][0-9]*$ ]]; then
-    ISSUE_KEY="${ENTITY_ID}"
+  ISSUE_KEY="$(jira_key_from_url "${GITHUB_ISSUE_URL:-}")"
+fi
+if [[ -z "${ISSUE_SOURCE}" || "${ISSUE_SOURCE}" == "null" ]]; then
+  if [[ "${GITHUB_ISSUE_URL:-}" == *".atlassian.net/"* ]] \
+    || [[ "${ISSUE_KEY}" =~ ^[A-Z][A-Z0-9]+-[0-9]+$ ]]; then
+    ISSUE_SOURCE="jira"
   fi
 fi
-
+if [[ -z "${ISSUE_KEY}" || "${ISSUE_KEY}" == "null" ]]; then
+  if [[ "${ISSUE_SOURCE}" != "jira" ]]; then
+    ENTITY_ID="$(payload_get '.issue.number // .entity.id // empty')"
+    if [[ "${ENTITY_ID}" =~ ^[1-9][0-9]*$ ]]; then
+      ISSUE_KEY="${ENTITY_ID}"
+    fi
+  fi
+fi
 if [[ -z "${ISSUE_SOURCE}" || "${ISSUE_SOURCE}" == "null" ]]; then
   if [[ "${ISSUE_KEY}" =~ ^[A-Z][A-Z0-9]+-[0-9]+$ ]]; then
     ISSUE_SOURCE="jira"
@@ -149,9 +177,17 @@ if [[ "${fetch_ok}" -ne 1 ]]; then
   exit 1
 fi
 
-# Persist for the sandbox env file (expand: true). GITHUB_ENV does not reach
-# the post-script in the same composite action step — post-refine re-parses
-# the event payload.
+export ISSUE_KEY ISSUE_SOURCE REPO_FULL_NAME GITHUB_ISSUE_URL HUMAN_INSTRUCTION
+jq -n \
+  --arg key "${ISSUE_KEY}" \
+  --arg source "${ISSUE_SOURCE}" \
+  --arg repo "${REPO_FULL_NAME}" \
+  --arg url "${GITHUB_ISSUE_URL:-}" \
+  '{issue_key:$key, issue_source:$source, repo_full_name:$repo, issue_url:$url}' \
+  > "${META_FILE}"
+
+# GITHUB_ENV does not reach the post-script in the same composite action
+# step — post-refine reads refine-meta.json / the event payload.
 if [[ -n "${GITHUB_ENV:-}" ]]; then
   {
     echo "ISSUE_KEY=${ISSUE_KEY}"
