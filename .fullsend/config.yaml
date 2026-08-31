@@ -16,6 +16,9 @@ roles:
     - fix
     - retro
     - prioritize
+agents:
+    - name: refine
+      source: harness/refine.yaml
 allowed_remote_resources:
     - https://raw.githubusercontent.com/fullsend-ai/fullsend/
     - https://raw.githubusercontent.com/fullsend-ai/agents/
