@@ -3,6 +3,11 @@
 # Manual only until a labeled issue produces a dispatch record.
 # Do not enable cron until that path is proven — the poller writes
 # entity properties on every issue it scans.
+#
+# reusable-dispatch.yml@v0.37.0 requires issue.html_url or
+# pull_request.html_url before harness-run. Jira NormalizedEvents only
+# have entity.url, so we copy that onto issue.html_url before calling
+# the reusable workflow (#2264 workaround).
 name: fullsend Jira poll
 
 on:
@@ -68,6 +73,31 @@ jobs:
           path: dispatches.json
           if-no-files-found: ignore
 
+      - name: Adapt Jira payloads for harness-run
+        if: always()
+        run: |
+          set -euo pipefail
+          if [[ ! -f dispatches.json ]]; then
+            echo "[]" > dispatches.json
+          fi
+          # v0.37 harness-run: jq '.issue.html_url // .pull_request.html_url'
+          # Jira poll events expose entity.url instead. Keep event_payload as
+          # a JSON string so fromJSON(matrix.event_payload) still works.
+          jq '
+            map(
+              (.event_payload | if type == "string" then fromjson else . end) as $ev
+              | .event_payload = (
+                  $ev
+                  | .issue = ((.issue // {}) + {
+                      html_url: (.issue.html_url // .entity.url // ""),
+                      number: (.issue.number // .entity.id // 0)
+                    })
+                  | tojson
+                )
+            )
+          ' dispatches.json > dispatches.adapted.json
+          mv dispatches.adapted.json dispatches.json
+
       - name: Build dispatch matrix
         id: build-matrix
         run: |
@@ -95,6 +125,7 @@ jobs:
     uses: fullsend-ai/fullsend/.github/workflows/reusable-dispatch.yml@84c8bbbb821ff85136854150b06740253709b3b8 # v0.37.0
     with:
       matrix: ${{ needs.poll.outputs.matrix }}
+      install_mode: per-repo
       mint_url: ${{ vars.FULLSEND_MINT_URL }}
       gcp_region: ${{ vars.FULLSEND_GCP_REGION }}
       jira_base_url: ${{ vars.JIRA_BASE_URL }}
