@@ -21,8 +21,12 @@ slug: fullsend-ai-review
 model: opus
 
 providers:
-  - vertex-ai
-  - github
+  - providers/vertex-ai.yaml
+  - providers/github.yaml
+openshell:
+  profiles:
+    - profiles/fullsend-vertex-ai.yaml
+    - profiles/fullsend-github.yaml
 
 skills:
   - skills/refining
