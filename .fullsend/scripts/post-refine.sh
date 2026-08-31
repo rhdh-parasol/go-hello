@@ -21,6 +21,23 @@ payload_get() {
 ISSUE_KEY="${ISSUE_KEY:-}"
 ISSUE_SOURCE="${ISSUE_SOURCE:-}"
 REPO_FULL_NAME="${REPO_FULL_NAME:-}"
+META_FILE="/tmp/workspace/refine-meta.json"
+
+jira_key_from_url() {
+  local url="$1"
+  if [[ "${url}" =~ /browse/([A-Z][A-Z0-9]+-[0-9]+) ]]; then
+    printf '%s' "${BASH_REMATCH[1]}"
+  fi
+}
+
+if [[ -f "${META_FILE}" ]]; then
+  ISSUE_KEY="$(jq -r '.issue_key // empty' "${META_FILE}")"
+  ISSUE_SOURCE="$(jq -r '.issue_source // empty' "${META_FILE}")"
+  REPO_FULL_NAME="$(jq -r '.repo_full_name // empty' "${META_FILE}")"
+  if [[ -z "${GITHUB_ISSUE_URL:-}" ]]; then
+    GITHUB_ISSUE_URL="$(jq -r '.issue_url // empty' "${META_FILE}")"
+  fi
+fi
 
 if [[ -z "${ISSUE_KEY}" && -f "${EVENT_FILE}" ]]; then
   ISSUE_KEY="$(payload_get '.entity.key // empty')"
@@ -31,14 +48,15 @@ fi
 if [[ -z "${REPO_FULL_NAME}" && -f "${EVENT_FILE}" ]]; then
   REPO_FULL_NAME="$(payload_get '.repo // empty')"
 fi
+if [[ -z "${GITHUB_ISSUE_URL:-}" && -f "${EVENT_FILE}" ]]; then
+  GITHUB_ISSUE_URL="$(payload_get '.entity.url // .issue.html_url // empty')"
+fi
 if [[ -z "${ISSUE_KEY}" ]]; then
-  ENTITY_ID="$(payload_get '.entity.id // .issue.number // empty')"
-  if [[ "${ENTITY_ID}" =~ ^[1-9][0-9]*$ ]]; then
-    ISSUE_KEY="${ENTITY_ID}"
-  fi
+  ISSUE_KEY="$(jira_key_from_url "${GITHUB_ISSUE_URL:-}")"
 fi
 if [[ -z "${ISSUE_SOURCE}" ]]; then
-  if [[ "${ISSUE_KEY}" =~ ^[A-Z][A-Z0-9]+-[0-9]+$ ]]; then
+  if [[ "${GITHUB_ISSUE_URL:-}" == *".atlassian.net/"* ]] \
+    || [[ "${ISSUE_KEY}" =~ ^[A-Z][A-Z0-9]+-[0-9]+$ ]]; then
     ISSUE_SOURCE="jira"
   else
     ISSUE_SOURCE="github"

@@ -1,10 +1,14 @@
 # Custom refine agent. Triggered by /fs-refine on a work item (Jira or GitHub).
 #
-# Jira: the poller emits a NormalizedEvent; this harness matches the slash
-# command and the post-script writes back to the ticket. Built-in agents still
-# do not post to Jira.
+# Jira poller event_payload is GitHub-shaped: issue.html_url is the browse URL
+# (e.g. https://redhat.atlassian.net/browse/DEVREG-281), issue.number is the
+# Jira numeric id — not the key. Pre/post scripts parse the key from that URL.
 #
 # Identity reuses the org review GitHub App (no refine mint slug).
+#
+# env.runner only lists host vars that reusable-dispatch actually sets.
+# Referencing RUN_URL/REVIEW_TOKEN/ISSUE_NUMBER here fails validation before
+# the agent starts.
 
 agent: agents/refine.md
 image: ghcr.io/fullsend-ai/fullsend-code:latest
@@ -55,22 +59,5 @@ env:
     JIRA_TOKEN: ${JIRA_TOKEN}
     JIRA_USER_EMAIL: ${JIRA_USER_EMAIL}
     JIRA_BASE_URL: ${JIRA_BASE_URL}
-    GH_TOKEN: ${GH_TOKEN}
-    REVIEW_TOKEN: ${REVIEW_TOKEN}
     REPO_FULL_NAME: ${REPO_FULL_NAME}
-    RUN_URL: ${RUN_URL}
     GITHUB_ISSUE_URL: ${GITHUB_ISSUE_URL}
-
-forge:
-  github:
-    pre_script: scripts/pre-refine.sh
-    post_script: scripts/post-refine.sh
-    env:
-      runner:
-        GH_TOKEN: ${GH_TOKEN}
-        REVIEW_TOKEN: ${REVIEW_TOKEN}
-        ISSUE_NUMBER: ${ISSUE_NUMBER}
-        REPO_FULL_NAME: ${REPO_FULL_NAME}
-        GITHUB_ISSUE_URL: ${GITHUB_ISSUE_URL}
-        HUMAN_INSTRUCTION: ${HUMAN_INSTRUCTION}
-        RUN_URL: ${RUN_URL}
