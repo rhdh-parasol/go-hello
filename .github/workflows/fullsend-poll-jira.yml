@@ -81,19 +81,25 @@ jobs:
             echo "[]" > dispatches.json
           fi
           # v0.37 harness-run: jq '.issue.html_url // .pull_request.html_url'
-          # Jira poll events expose entity.url instead. Keep event_payload as
-          # a JSON string so fromJSON(matrix.event_payload) still works.
+          # Jira poll events already use issue.html_url = browse URL and
+          # issue.number = Jira's internal id. Copy entity.url if missing.
+          # Clear status_number for Jira so fullsend run does not try to
+          # comment on GitHub issue 5593227 (and mint role "refine", which
+          # 403s).
           jq '
             map(
               (.event_payload | if type == "string" then fromjson else . end) as $ev
-              | .event_payload = (
-                  $ev
+              | ($ev
                   | .issue = ((.issue // {}) + {
                       html_url: (.issue.html_url // .entity.url // ""),
                       number: (.issue.number // .entity.id // 0)
                     })
-                  | tojson
-                )
+                ) as $patched
+              | .event_payload = ($patched | tojson)
+              | if ($patched.issue.html_url | tostring | test("atlassian\\.net"))
+                then .status_number = ""
+                else .
+                end
             )
           ' dispatches.json > dispatches.adapted.json
           mv dispatches.adapted.json dispatches.json
