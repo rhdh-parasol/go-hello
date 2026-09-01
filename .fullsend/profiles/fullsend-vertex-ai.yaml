@@ -16,4 +16,6 @@ endpoints:
     enforcement: enforce
 binaries:
   - "**/claude"
+  # Claude Code 2.1+ ships the bun compile as claude.exe; **/claude does not match it.
+  - "**/claude.exe"
   - "**/node"

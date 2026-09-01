@@ -18,8 +18,8 @@ readonly_repo: true
 role: review
 slug: fullsend-ai-review
 
-# Pin 4.6 explicitly. The `opus` alias on Claude Code 2.1.x resolves to
-# claude-opus-5, which Vertex denied (policy_denied, 0 tokens).
+# Pin 4.6 explicitly (same as other rhdh-parasol repos). The `opus` alias on
+# Claude Code 2.1.x resolves to claude-opus-5.
 model: claude-opus-4-6
 
 providers:
