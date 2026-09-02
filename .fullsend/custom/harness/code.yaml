@@ -1,0 +1,47 @@
+# Overlay the stock 0.39 code agent with OpenSpec fast-forward + apply.
+#
+# Keep post-code (push + GitHub PR). Do not add a /fs-spec command.
+# Jira /fs-code is matched here via CEL so the poller can dispatch; GitHub
+# /fs-code stays on the built-in stage router (this trigger is Jira-only
+# so the two paths do not double-fire).
+#
+# Skills are URL-pinned from redhat-developer/rhdh-skills (not vendored).
+# One-shot pair only: ff-change then apply-change. Interactive skills
+# (new-change, continue) are omitted — they stop mid-run.
+# rhdh-spec-driven-schema is required by those skills (lives under
+# skills/reference, not skills/refinement). First /fs-code run installs
+# the schema into openspec/ via that skill — do not vendor it here.
+#
+# Harness-level allowed_remote_resources is required for URL skills
+# (not inherited from base or config.yaml).
+
+base: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/harness/code.yaml#sha256=4f0d9425d5ee1fa86e21d3b6d1ac9bd086da2f59de9d80a311f753c00d99303d
+
+agent: custom/agents/code.md
+model: claude-opus-4-6
+
+skills:
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-ff-change#sha256=683d4636797fa133c029f7e7b491186d9842421bf91f49bcc990239fc4ddfbe9
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-apply-change#sha256=b86936803b684ea7fed4e8dc91a4ecb7713aad04a4f5ca9d948c3cda75b7c501
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/reference/rhdh-spec-driven-schema#sha256=1fff2f2f5e4e6f9d89d2a8fc1bca206db825d8f7d8edebe2f3661740ceb458cd
+
+allowed_remote_resources:
+  - https://github.com/redhat-developer/rhdh-skills/
+
+openshell:
+  profiles:
+    - custom/profiles/claude-exe.yaml
+    - custom/profiles/openspec.yaml
+
+host_files:
+  - src: custom/env/openspec.env
+    dest: /sandbox/workspace/.env.d/openspec.env
+
+timeout_minutes: 50
+
+trigger: >
+  event.source.system == "jira"
+    && event.transition.kind == "comment_added"
+    && has(event.transition.comment.command)
+    && event.transition.comment.command == "/fs-code"
+    && event.entity.kind == "work_item"
