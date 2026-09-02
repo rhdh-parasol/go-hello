@@ -9,13 +9,19 @@
 #
 # Identity reuses the org review GitHub App (no refine mint slug).
 #
+# OpenShell 0.0.116 (fullsend 0.39) requires provider *files* whose type
+# matches an imported profile id. Bare names `vertex-ai` / `github` do
+# not import profiles, so provider create fails with
+# "unsupported provider type or profile: fullsend-vertex-ai" (and
+# fullsend-github, which 0.39 removed — review agents use github-ro).
+#
 # env.runner only lists host vars that reusable-dispatch actually sets.
 # Referencing RUN_URL/REVIEW_TOKEN/ISSUE_NUMBER here fails validation before
 # the agent starts.
 
 agent: custom/agents/refine.md
 image: ghcr.io/fullsend-ai/fullsend-code:latest
-policy: custom/policies/refine.yaml
+policy: policies/base.yaml
 readonly_repo: true
 
 role: review
@@ -26,8 +32,12 @@ slug: fullsend-ai-review
 model: claude-opus-4-6
 
 providers:
-  - vertex-ai
-  - github
+  - providers/vertex-ai.yaml
+
+openshell:
+  profiles:
+    - profiles/fullsend-vertex-ai.yaml
+    - custom/profiles/claude-exe.yaml
 
 skills:
   - custom/skills/refining
