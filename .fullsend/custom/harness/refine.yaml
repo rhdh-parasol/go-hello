@@ -1,5 +1,8 @@
 # Custom refine agent. Triggered by /fs-refine on a work item (Jira or GitHub).
 #
+# Paths use custom/ to avoid scaffold overlay collisions (fullsend layers
+# upstream defaults into top-level .fullsend dirs on every run).
+#
 # Jira poller event_payload is GitHub-shaped: issue.html_url is the browse URL
 # (e.g. https://redhat.atlassian.net/browse/DEVREG-281), issue.number is the
 # Jira numeric id — not the key. Pre/post scripts parse the key from that URL.
@@ -10,34 +13,30 @@
 # Referencing RUN_URL/REVIEW_TOKEN/ISSUE_NUMBER here fails validation before
 # the agent starts.
 
-agent: agents/refine.md
+agent: custom/agents/refine.md
 image: ghcr.io/fullsend-ai/fullsend-code:latest
-policy: policies/base.yaml
+policy: custom/policies/refine.yaml
 readonly_repo: true
 
 role: review
 slug: fullsend-ai-review
 
-# Pin 4.6 explicitly (same as other rhdh-parasol repos). The `opus` alias on
-# Claude Code 2.1.x resolves to claude-opus-5.
+# Pin 4.6 explicitly. The `opus` alias on Claude Code 2.1.x resolves to
+# claude-opus-5. Opus 4.8 is not enabled on this Vertex project.
 model: claude-opus-4-6
 
 providers:
-  - providers/vertex-ai.yaml
-  - providers/github.yaml
-openshell:
-  profiles:
-    - profiles/fullsend-vertex-ai.yaml
-    - profiles/fullsend-github.yaml
+  - vertex-ai
+  - github
 
 skills:
-  - skills/refining
+  - custom/skills/refining
 
 host_files:
-  - src: env/gcp-vertex.env
+  - src: custom/env/gcp-vertex.env
     dest: /sandbox/workspace/.env.d/gcp-vertex.env
     expand: true
-  - src: env/refine.env
+  - src: custom/env/refine.env
     dest: /sandbox/workspace/.env.d/refine.env
     expand: true
   - src: ${GOOGLE_APPLICATION_CREDENTIALS}
@@ -49,8 +48,8 @@ host_files:
     dest: /sandbox/workspace/issue-context.json
     optional: true
 
-pre_script: scripts/pre-refine.sh
-post_script: scripts/post-refine.sh
+pre_script: custom/scripts/pre-refine.sh
+post_script: custom/scripts/post-refine.sh
 
 timeout_minutes: 20
 

@@ -1,0 +1,39 @@
+# Overlay the stock 0.39 code agent with OpenSpec fast-forward + apply.
+#
+# Keep post-code (push + GitHub PR). Do not add a /fs-spec command.
+# Jira /fs-code is matched here via CEL so the poller can dispatch; GitHub
+# /fs-code stays on the built-in stage router (this trigger is Jira-only
+# so the two paths do not double-fire).
+#
+# Vendored skills are the one-shot pair from redhat-developer/rhdh-skills
+# @305f8283d4774ba07fd6bbf0bbceb7a12d509380 (openspec-ff-change +
+# openspec-apply-change + rhdh-spec-driven-schema). Interactive skills
+# (new-change, continue) are intentionally omitted — they stop mid-run.
+
+base: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/harness/code.yaml#sha256=4f0d9425d5ee1fa86e21d3b6d1ac9bd086da2f59de9d80a311f753c00d99303d
+
+agent: custom/agents/code.md
+model: claude-opus-4-6
+
+skills:
+  - custom/skills/openspec-ff-change
+  - custom/skills/openspec-apply-change
+  - custom/skills/rhdh-spec-driven-schema
+
+openshell:
+  profiles:
+    - custom/profiles/claude-exe.yaml
+    - custom/profiles/openspec.yaml
+
+host_files:
+  - src: custom/env/openspec.env
+    dest: /sandbox/workspace/.env.d/openspec.env
+
+timeout_minutes: 50
+
+trigger: >
+  event.source.system == "jira"
+    && event.transition.kind == "comment_added"
+    && has(event.transition.comment.command)
+    && event.transition.comment.command == "/fs-code"
+    && event.entity.kind == "work_item"

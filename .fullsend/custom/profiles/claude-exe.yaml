@@ -1,7 +1,7 @@
 ---
-id: fullsend-vertex-ai
-display_name: Fullsend Vertex AI
-description: Anthropic API and Google Cloud APIs for inference
+id: claude-exe
+display_name: Claude Code 2.1 binary
+description: Allow claude.exe to reach Vertex STS (**/claude does not match)
 category: inference
 endpoints:
   - host: api.anthropic.com
@@ -15,7 +15,6 @@ endpoints:
     access: read-write
     enforcement: enforce
 binaries:
-  - "**/claude"
-  # Claude Code 2.1+ ships the bun compile as claude.exe; **/claude does not match it.
   - "**/claude.exe"
+  - "**/claude"
   - "**/node"

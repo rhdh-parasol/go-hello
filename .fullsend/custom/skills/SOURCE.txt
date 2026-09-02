@@ -1,0 +1,12 @@
+Vendored from https://github.com/redhat-developer/rhdh-skills
+commit 305f8283d4774ba07fd6bbf0bbceb7a12d509380 (main, 2026-09-02)
+
+Included (one-shot /fs-code path):
+  skills/refinement/openspec-ff-change
+  skills/refinement/openspec-apply-change
+  skills/reference/rhdh-spec-driven-schema
+
+Omitted on purpose (they stop and wait for a human):
+  skills/refinement/openspec-new-change
+  skills/refinement/openspec-continue-change
+  plus archive / audit / explore / onboard / sync / verify / bulk-archive

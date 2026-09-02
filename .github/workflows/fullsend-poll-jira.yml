@@ -1,10 +1,10 @@
-# Jira poller for DEVREG (fullsend v0.37.0).
+# Jira poller for DEVREG (fullsend v0.39.0).
 #
 # Manual only until a labeled issue produces a dispatch record.
 # Do not enable cron until that path is proven — the poller writes
 # entity properties on every issue it scans.
 #
-# reusable-dispatch.yml@v0.37.0 requires issue.html_url or
+# reusable-dispatch.yml@v0.39.0 still requires issue.html_url or
 # pull_request.html_url before harness-run. Jira NormalizedEvents only
 # have entity.url, so we copy that onto issue.html_url before calling
 # the reusable workflow (#2264 workaround).
@@ -37,8 +37,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download v0.37.0 --repo fullsend-ai/fullsend \
-            -p 'fullsend_0.37.0_linux_amd64.tar.gz' -O - | tar xz
+          gh release download v0.39.0 --repo fullsend-ai/fullsend \
+            -p 'fullsend_0.39.0_linux_amd64.tar.gz' -O - | tar xz
           sudo mv fullsend /usr/local/bin/
           fullsend --version
 
@@ -80,7 +80,7 @@ jobs:
           if [[ ! -f dispatches.json ]]; then
             echo "[]" > dispatches.json
           fi
-          # v0.37 harness-run: jq '.issue.html_url // .pull_request.html_url'
+          # v0.39 harness-run: jq '.issue.html_url // .pull_request.html_url'
           # Jira poll events already use issue.html_url = browse URL and
           # issue.number = Jira's internal id. Copy entity.url if missing.
           # Clear status_number for Jira so fullsend run does not try to
@@ -128,13 +128,14 @@ jobs:
     name: Harness
     needs: poll
     if: needs.poll.outputs.has_dispatches == 'true'
-    uses: fullsend-ai/fullsend/.github/workflows/reusable-dispatch.yml@84c8bbbb821ff85136854150b06740253709b3b8 # v0.37.0
+    uses: fullsend-ai/fullsend/.github/workflows/reusable-dispatch.yml@d9e8bec726f85e0cfd1aeca44252030135a5b1d1 # v0.39.0
     with:
       matrix: ${{ needs.poll.outputs.matrix }}
       install_mode: per-repo
       mint_url: ${{ vars.FULLSEND_MINT_URL }}
       gcp_region: ${{ vars.FULLSEND_GCP_REGION }}
       jira_base_url: ${{ vars.JIRA_BASE_URL }}
+      runner_image: ubuntu-24.04
     secrets:
       FULLSEND_GCP_WIF_PROVIDER: ${{ secrets.FULLSEND_GCP_WIF_PROVIDER }}
       FULLSEND_GCP_PROJECT_ID: ${{ secrets.FULLSEND_GCP_PROJECT_ID }}
