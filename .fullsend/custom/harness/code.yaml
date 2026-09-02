@@ -32,9 +32,11 @@ allowed_remote_resources:
   - https://raw.githubusercontent.com/fullsend-ai/agents/
   - https://github.com/redhat-developer/rhdh-skills/
 
-openshell:
-  profiles:
-    - custom/profiles/openspec.yaml
+# Do not add a sibling OpenSpec profile. OpenShell 0.0.116 rejects
+# category: toolchain, and a different profile id does not extend
+# `_provider_package_registries` (same lesson as claude.exe / Vertex).
+# Stock fullsend-package-registries already allowlists npm/npx/node
+# against registry.npmjs.org. Keep openspec.env to disable telemetry.
 
 host_files:
   - src: custom/env/openspec.env
