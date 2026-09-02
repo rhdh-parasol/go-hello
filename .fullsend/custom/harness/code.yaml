@@ -1,16 +1,18 @@
-# Overlay the stock 0.39 code agent with OpenSpec fast-forward + apply.
+# Overlay the stock 0.39 code agent with OpenSpec spec-then-impl.
 #
 # Keep post-code (push + GitHub PR). Do not add a /fs-spec command.
+# Same /fs-code twice: first run writes openspec/ only (spec PR); after
+# that merges, second run implements from those artifacts (impl PR).
 # Jira /fs-code is matched here via CEL so the poller can dispatch; GitHub
 # /fs-code stays on the built-in stage router (this trigger is Jira-only
 # so the two paths do not double-fire).
 #
 # Skills are URL-pinned from redhat-developer/rhdh-skills (not vendored).
-# One-shot pair only: ff-change then apply-change. Interactive skills
-# (new-change, continue) are omitted — they stop mid-run.
-# rhdh-spec-driven-schema is required by those skills (lives under
-# skills/reference, not skills/refinement). First /fs-code run installs
-# the schema into openspec/ via that skill — do not vendor it here.
+# Both ff-change and apply-change are listed; the agent prompt picks
+# exactly one per run. Interactive skills (new-change, continue) are
+# omitted — they stop mid-run. rhdh-spec-driven-schema is required by
+# those skills (lives under skills/reference, not skills/refinement).
+# First spec run installs the schema into openspec/ — do not vendor it.
 #
 # Base pin is agents#1117 (ba1d46fb): same code.yaml as c4e059f9, but
 # the inherited fullsend-vertex-ai profile allows **/claude.exe.
