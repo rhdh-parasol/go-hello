@@ -1,8 +1,8 @@
 schema: rhdh-spec-driven
 
 context: |
-  Domain: Red Hat Developer Hub (RHDH) — enterprise Backstage distribution
-  Tech stack: TypeScript, React, Node.js (Backstage framework)
+  Domain: rhdh-parasol playground — minimal Go HTTP service
+  Tech stack: Go 1.22, standard library only
   We use conventional commits
 
   RHDH uses a split canonical model.
@@ -69,7 +69,7 @@ rules:
     - Follow the project-local `rhdh-spec-driven` schema's capability spec.
   tasks:
     - Break tasks into chunks of max 2 hours
-    - When the change adds or materially edits a long-lived spec under `openspec/specs/<capability>/spec.md`
+    - When the change adds or materially edits a long-lived spec under `openspec/specs/<capability>/spec.md`, add a task to archive the superseded spec version and verify the updated spec passes validation
     - Follow the project-local `rhdh-spec-driven` schema's task checklist, verification, canonical update requirements.
   design:
     - Reference existing ADRs in specifications/adr/ for prior decisions

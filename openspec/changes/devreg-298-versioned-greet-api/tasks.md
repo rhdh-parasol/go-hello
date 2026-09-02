@@ -10,14 +10,14 @@
 
 - [ ] 2.1 Add `v1GreetHandler` for `POST /v1/greet`: parse JSON body `{"name":"..."}`, trim whitespace, validate name is 1–64 chars after trimming, return `{"message":"Hello, <name>!", "name":"<name>"}` on 200, or `{"error":"validation_error", "message":"<reason>"}` on 400 for empty/too-long name, missing body, malformed JSON, or missing `name` field.
 - [ ] 2.2 Register `POST /v1/greet` on the mux alongside existing routes. Ensure `GET /greet` remains unchanged.
-- [ ] 2.3 Write unit tests covering: valid name, trimmed name, empty name, whitespace-only name, name exceeding 64 chars, missing body, malformed JSON, missing `name` field, existing `GET /greet` with and without query param still works.
+- [ ] 2.3 Write unit tests covering: valid name, trimmed name, empty name, whitespace-only name, name exceeding 64 chars, missing body, malformed JSON, missing `name` field, wrong Content-Type, existing `GET /greet` with and without query param still works.
 
 ## 3. Kubernetes Probes and Graceful Shutdown
 
 - [ ] 3.1 Add `liveHandler` (always returns 200 `{"status":"ok"}`) and `readyHandler` (returns 200 `{"status":"ok"}` when accepting traffic, 503 `{"status":"shutting_down"}` after shutdown signal). Use `atomic.Bool` for the readiness flag.
-- [ ] 3.2 Implement graceful shutdown: replace `http.ListenAndServe` with `http.Server`, use `os/signal.NotifyContext` for SIGTERM/SIGINT, flip readiness flag to false on signal, call `Server.Shutdown` with configurable timeout from `SHUTDOWN_TIMEOUT` env var (default 15s). Ensure exit code 0 after clean drain.
+- [ ] 3.2 Implement graceful shutdown: replace `http.ListenAndServe` with `http.Server`, use `os/signal.NotifyContext` for SIGTERM/SIGINT, flip readiness flag to false on signal, call `Server.Shutdown` with configurable timeout from `SHUTDOWN_TIMEOUT` env var (parsed as Go `time.Duration`, default 15s; fall back to default on parse error). Ensure exit code 0 after clean drain.
 - [ ] 3.3 Register `/live` and `/ready` routes. Ensure `GET /health` remains unchanged.
-- [ ] 3.4 Write unit tests verifying: `/live` returns 200, `/ready` returns 200 before shutdown, `/ready` returns 503 after readiness flag is flipped, `/health` still works, `SHUTDOWN_TIMEOUT` is parsed correctly.
+- [ ] 3.4 Write unit tests verifying: `/live` returns 200, `/ready` returns 200 before shutdown, `/ready` returns 503 after readiness flag is flipped, `/health` still works, `SHUTDOWN_TIMEOUT` is parsed correctly, invalid `SHUTDOWN_TIMEOUT` falls back to 15s default.
 
 ## 4. OpenAPI Specification
 

@@ -52,6 +52,11 @@ The server SHALL return 400 for requests with missing JSON body, unparseable JSO
 - **WHEN** a client sends `POST /v1/greet` with body `{}`
 - **THEN** the server responds with status 400 and a JSON body containing `"error":"validation_error"`
 
+#### Scenario: Wrong Content-Type rejected
+
+- **WHEN** a client sends `POST /v1/greet` with `Content-Type: text/plain` and body `{"name":"Ada"}`
+- **THEN** the server responds with status 400 and a JSON body containing `"error":"validation_error"`
+
 ### Requirement: Existing GET /greet endpoint unchanged
 
 The existing `GET /greet` endpoint MUST continue to function identically. It SHALL NOT be modified or removed by this change.

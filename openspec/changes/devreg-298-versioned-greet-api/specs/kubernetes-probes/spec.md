@@ -30,7 +30,7 @@ The server SHALL expose a `GET /ready` endpoint that returns HTTP 200 while the 
 
 ### Requirement: Graceful shutdown drains in-flight requests
 
-On receiving SIGTERM or SIGINT, the server SHALL stop accepting new connections, drain all in-flight requests within a configurable timeout, and exit with code 0.
+On receiving SIGTERM or SIGINT, the server SHALL stop accepting new connections, drain all in-flight requests within a configurable timeout, and exit with code 0. The `SHUTDOWN_TIMEOUT` value SHALL be parsed as a Go `time.Duration` string (e.g., `5s`, `30s`). If the value cannot be parsed, the server SHALL fall back to the 15-second default.
 
 #### Scenario: In-flight requests complete during shutdown
 
@@ -46,6 +46,11 @@ On receiving SIGTERM or SIGINT, the server SHALL stop accepting new connections,
 
 - **WHEN** the server receives SIGTERM and all in-flight requests complete within the timeout
 - **THEN** the process exits with code 0
+
+#### Scenario: Invalid SHUTDOWN_TIMEOUT falls back to default
+
+- **WHEN** the `SHUTDOWN_TIMEOUT` environment variable is set to `invalid`
+- **THEN** the server uses the 15-second default as the maximum drain duration
 
 ### Requirement: GET /health remains unchanged
 

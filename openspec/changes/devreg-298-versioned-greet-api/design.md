@@ -25,7 +25,7 @@ No canonical document updates. No existing PRD, ADR, or long-lived capability sp
 
 ## Decisions
 
-### 1. Use `log/slog` for structured logging (stdlib, Go 1.22+)
+### 1. Use `log/slog` for structured logging (stdlib, Go 1.21+)
 
 **Rationale:** `log/slog` ships with Go 1.21+ and provides structured JSON output with `slog.NewJSONHandler`. This avoids adding `go.uber.org/zap` or `rs/zerolog` as external dependencies while meeting all logging requirements.
 
@@ -67,7 +67,7 @@ No canonical document updates. No existing PRD, ADR, or long-lived capability sp
 
 ## Risks / Trade-offs
 
-- **[`log/slog` output format]** `slog.NewJSONHandler` field names differ from some log aggregators' defaults (e.g., `time` vs `ts`). → Mitigation: Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` → `ts` and `msg` → `msg`, ensuring the spec-required field names.
+- **[`log/slog` output format]** `slog.NewJSONHandler` field names differ from some log aggregators' defaults (e.g., `time` vs `ts`). → Mitigation: Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` → `ts`, ensuring the spec-required field names.
 
 - **[Shutdown race on readiness flip]** A request arriving between the signal and the readiness flag flip could see a 200 from `/ready` then immediately get connection-refused. → Mitigation: Flip the atomic flag before calling `Server.Shutdown`; the window is negligible in practice.
 
