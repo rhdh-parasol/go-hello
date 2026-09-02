@@ -1,0 +1,149 @@
+openapi: "3.0.3"
+info:
+  title: go-hello API
+  description: A simple Go HTTP service with versioned greet API, health checks, and Kubernetes probes.
+  version: "0.2.0"
+
+paths:
+  /v1/greet:
+    post:
+      summary: Greet a user by name
+      description: Accepts a JSON body with a name field and returns a greeting message.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GreetRequest"
+            example:
+              name: Ada
+      responses:
+        "200":
+          description: Successful greeting
+          headers:
+            X-Request-ID:
+              $ref: "#/components/headers/X-Request-ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetResponse"
+              example:
+                message: "Hello, Ada!"
+                name: Ada
+        "400":
+          description: Validation error
+          headers:
+            X-Request-ID:
+              $ref: "#/components/headers/X-Request-ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: validation_error
+                message: "name is required"
+
+  /live:
+    get:
+      summary: Liveness probe
+      description: Returns 200 whenever the process is running. Use as Kubernetes liveness probe.
+      responses:
+        "200":
+          description: Process is alive
+          headers:
+            X-Request-ID:
+              $ref: "#/components/headers/X-Request-ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProbeResponse"
+              example:
+                status: ok
+
+  /ready:
+    get:
+      summary: Readiness probe
+      description: |
+        Returns 200 while the server is accepting traffic.
+        Returns 503 after a shutdown signal (SIGTERM/SIGINT) is received.
+        Use as Kubernetes readiness probe.
+      responses:
+        "200":
+          description: Server is ready to accept traffic
+          headers:
+            X-Request-ID:
+              $ref: "#/components/headers/X-Request-ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProbeResponse"
+              example:
+                status: ok
+        "503":
+          description: Server is shutting down
+          headers:
+            X-Request-ID:
+              $ref: "#/components/headers/X-Request-ID"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProbeResponse"
+              example:
+                status: shutting_down
+
+components:
+  headers:
+    X-Request-ID:
+      description: Unique request identifier for log correlation (32-character hex string).
+      schema:
+        type: string
+        pattern: "^[0-9a-f]{32}$"
+        example: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+
+  schemas:
+    GreetRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: Name to greet (trimmed of leading/trailing whitespace).
+          example: Ada
+
+    GreetResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The greeting message.
+          example: "Hello, Ada!"
+        name:
+          type: string
+          description: The (trimmed) name that was greeted.
+          example: Ada
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Machine-readable error code.
+          example: validation_error
+        message:
+          type: string
+          description: Human-readable error detail.
+          example: "name is required"
+
+    ProbeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Probe status.
+          enum:
+            - ok
+            - shutting_down
+          example: ok
