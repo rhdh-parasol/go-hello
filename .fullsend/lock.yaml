@@ -4,8 +4,8 @@ generated_at: 2026-09-02T21:16:37.686537Z
 harnesses:
     code:
         source: harness/code.yaml
-        sha256: 6b2e7ea02e0532095896c5bdd5bbb7e2bfcfd6d5370b0bb90997e51394dcc6c4
-        resolved_at: 2026-09-02T22:25:15.273964Z
+        sha256: 4c5566c8f8b29e9ce7120752e15762daf89dc9513c44e8aedd71837dafb221b0
+        resolved_at: 2026-09-02T22:49:36.793978Z
         dependencies:
             - field: base
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/harness/code.yaml
