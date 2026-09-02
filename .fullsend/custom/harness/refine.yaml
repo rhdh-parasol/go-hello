@@ -9,11 +9,10 @@
 #
 # Identity reuses the org review GitHub App (no refine mint slug).
 #
-# OpenShell 0.0.116 (fullsend 0.39) requires provider *files* whose type
-# matches an imported profile id. Bare names `vertex-ai` / `github` do
-# not import profiles, so provider create fails with
-# "unsupported provider type or profile: fullsend-vertex-ai" (and
-# fullsend-github, which 0.39 removed — review agents use github-ro).
+# 0.39 overlay does not copy agents profiles/providers into this repo
+# (PR 17 deleted the vendored copies). Local paths like
+# profiles/fullsend-vertex-ai.yaml 404 at harness-load. Pin the same
+# files the code agent already locks from fullsend-ai/agents.
 #
 # env.runner only lists host vars that reusable-dispatch actually sets.
 # Referencing RUN_URL/REVIEW_TOKEN/ISSUE_NUMBER here fails validation before
@@ -21,7 +20,7 @@
 
 agent: custom/agents/refine.md
 image: ghcr.io/fullsend-ai/fullsend-code:latest
-policy: policies/base.yaml
+policy: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/policies/base.yaml#sha256=3ed634401d87a1327fffe5e266272d930321484ce8a91dfa5fe447d4f2e00470
 readonly_repo: true
 
 role: review
@@ -32,12 +31,17 @@ slug: fullsend-ai-review
 model: claude-opus-4-6
 
 providers:
-  - providers/vertex-ai.yaml
+  - https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/providers/vertex-ai.yaml#sha256=ae5ebe527e5d7b0fa6994346fde3f6ba11b632a3ba78ece96591b5ed85083ec1
 
 openshell:
   profiles:
-    - profiles/fullsend-vertex-ai.yaml
+    - https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/profiles/fullsend-vertex-ai.yaml#sha256=1bd763964e48c695aadc9219a169bafb714db10b560abef3e56157dd5d180338
     - custom/profiles/claude-exe.yaml
+
+# URL policy/provider/profile need the harness allowlist (not inherited from
+# config.yaml). Prefix must match config.yaml allowed_remote_resources.
+allowed_remote_resources:
+  - https://raw.githubusercontent.com/fullsend-ai/agents/
 
 skills:
   - custom/skills/refining

@@ -1001,3 +1001,23 @@ harnesses:
                 - path: scripts/install_project_schema.py
                   sha256: a2656ea6391138adf3f32c7f7a8ae96c6b92a15200c48b8c74fbf5b63023dfe9
               fetched_at: 2026-09-02T21:27:56.504684Z
+    refine:
+        source: harness/refine.yaml
+        sha256: b93e9842580185660067cec42a8643e85ccf82dd9085a9fb4bb3f0db5eed5aa5
+        resolved_at: 2026-09-02T21:50:35.131023Z
+        dependencies:
+            - field: policy
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/policies/base.yaml
+              sha256: 3ed634401d87a1327fffe5e266272d930321484ce8a91dfa5fe447d4f2e00470
+              type: file
+              fetched_at: 2026-09-02T21:16:27.290515Z
+            - field: openshell.profiles[0]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/profiles/fullsend-vertex-ai.yaml
+              sha256: 1bd763964e48c695aadc9219a169bafb714db10b560abef3e56157dd5d180338
+              type: file
+              fetched_at: 2026-09-02T21:16:33.89257Z
+            - field: providers[0]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/providers/vertex-ai.yaml
+              sha256: ae5ebe527e5d7b0fa6994346fde3f6ba11b632a3ba78ece96591b5ed85083ec1
+              type: file
+              fetched_at: 2026-09-02T21:16:34.80474Z
