@@ -12,9 +12,6 @@
 # skills/reference, not skills/refinement). First /fs-code run installs
 # the schema into openspec/ via that skill — do not vendor it here.
 #
-# Harness-level allowed_remote_resources is required for URL skills
-# (not inherited from base or config.yaml).
-#
 # Base pin is agents#1117 (ba1d46fb): same code.yaml as c4e059f9, but
 # the inherited fullsend-vertex-ai profile allows **/claude.exe.
 # A sibling claude-exe profile does not extend `_provider_vertex_ai`.
@@ -29,7 +26,10 @@ skills:
   - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-apply-change#sha256=b86936803b684ea7fed4e8dc91a4ecb7713aad04a4f5ca9d948c3cda75b7c501
   - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/reference/rhdh-spec-driven-schema#sha256=1fff2f2f5e4e6f9d89d2a8fc1bca206db825d8f7d8edebe2f3661740ceb458cd
 
+# URL base/skills need the harness allowlist (not inherited from base
+# or config.yaml). Prefixes must match config.yaml.
 allowed_remote_resources:
+  - https://raw.githubusercontent.com/fullsend-ai/agents/
   - https://github.com/redhat-developer/rhdh-skills/
 
 openshell:
@@ -39,6 +39,15 @@ openshell:
 host_files:
   - src: custom/env/openspec.env
     dest: /sandbox/workspace/.env.d/openspec.env
+
+# Stock code.yaml interpolates ${CODE_ALLOWED_TARGET_BRANCHES}. Built-in
+# GitHub dispatch sets that host var; the Jira poller does not, so
+# harness-load fails before the sandbox starts. Child env.runner merges
+# over base (child keys win). Pin main — post-code allowlists it, empty
+# would also fall back to the repo default.
+env:
+  runner:
+    CODE_ALLOWED_TARGET_BRANCHES: "main"
 
 timeout_minutes: 50
 
