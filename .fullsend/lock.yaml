@@ -4,8 +4,8 @@ generated_at: 2026-09-02T21:16:37.686537Z
 harnesses:
     code:
         source: harness/code.yaml
-        sha256: 31b5dc07d608fa675499b34da208be00ca12f28be0507bac245ea79417c6f2c9
-        resolved_at: 2026-09-02T22:03:33.372644Z
+        sha256: 55b58d2c9b501d00d78c8227fd1c376bdb98e9b1c979c64e7eabc4500f11e6d3
+        resolved_at: 2026-09-02T22:20:52.834693Z
         dependencies:
             - field: base
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/harness/code.yaml
@@ -217,7 +217,7 @@ harnesses:
                   sha256: 0c23ac243bea7a4898fb790d9aeae8f45aa87cb30f99019692a431e39ccb0e6c
                 - path: validate-output-schema.sh
                   sha256: 3e874a4553a24e99577da0cb6c0910ef80622fb85d53e03b057f6a6c0c4f8704
-              fetched_at: 2026-09-02T22:03:21.627176Z
+              fetched_at: 2026-09-02T22:03:21.602776Z
             - field: post_script
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/scripts/post-code.sh
               sha256: d170de3071cdcdc7c17ab7ca674db7c1f0f8de97f84dab0459eb5568506ba7d1
@@ -634,7 +634,7 @@ harnesses:
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/schemas/code-result.schema.json
               sha256: 6a8e8d6668416f399e2dba2de3dbd99070f7849a66b8bc3019c6b3ec3a5dd395
               type: resource
-              fetched_at: 2026-09-02T22:03:21.915753Z
+              fetched_at: 2026-09-02T22:03:21.902781Z
             - field: overlays[2].pre_script
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/scripts/pre-code-jira.sh
               sha256: d170de3071cdcdc7c17ab7ca674db7c1f0f8de97f84dab0459eb5568506ba7d1
@@ -845,12 +845,12 @@ harnesses:
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/agents/code.md
               sha256: e44399f35e31b4664a63407a9c674ed6b3d73c56e9a4af3515a007b06f142720
               type: resource
-              fetched_at: 2026-09-02T22:03:22.118014Z
+              fetched_at: 2026-09-02T22:03:22.104929Z
             - field: policy
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/policies/base.yaml
               sha256: 3ed634401d87a1327fffe5e266272d930321484ce8a91dfa5fe447d4f2e00470
               type: resource
-              fetched_at: 2026-09-02T22:03:22.320342Z
+              fetched_at: 2026-09-02T22:03:22.307814Z
             - field: skills[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/skills/code-implementation/SKILL.md
               sha256: 0139498ce84076611bbd513b8b01272d4c170ebc9dbfe168633db68cd73b1297
@@ -858,7 +858,7 @@ harnesses:
               files:
                 - path: SKILL.md
                   sha256: 1ab8409cca7182c37a99809a373840a6a85125609e539e5c798e0af88bae276e
-              fetched_at: 2026-09-02T22:03:24.213052Z
+              fetched_at: 2026-09-02T22:03:24.20519Z
             - field: overlays[0].skills[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/skills/github-forge/SKILL.md
               sha256: a90fcc604ee39a6818fdb902c27ecdaa16d5669c271a37f03bea0e21c80559f1
@@ -866,7 +866,7 @@ harnesses:
               files:
                 - path: SKILL.md
                   sha256: 586d55262e75732b027bca9a8ee5c43cb0e1a242ae7550d83e5b1a965828d756
-              fetched_at: 2026-09-02T22:03:26.21637Z
+              fetched_at: 2026-09-02T22:03:26.207018Z
             - field: overlays[1].skills[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/skills/gitlab-forge/SKILL.md
               sha256: 0a9d5db12dc5d84a8956b560024fd7c47ed9b8894b7c104bc2aac555cb95e776
@@ -874,77 +874,77 @@ harnesses:
               files:
                 - path: SKILL.md
                   sha256: c86b16842d5abaa9c7b2108d8ef5d56d10c557839922406ce0d0522080bf7f9a
-              fetched_at: 2026-09-02T22:03:28.212496Z
+              fetched_at: 2026-09-02T22:03:28.203558Z
             - field: host_files[0].src
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/env/gcp-vertex.env
               sha256: 10b2ba695b1d4e65e0964a233b75d6a06853f1eaefc260c56b9eedd989ae7d41
               type: resource
-              fetched_at: 2026-09-02T22:03:28.423616Z
+              fetched_at: 2026-09-02T22:03:28.40952Z
             - field: host_files[1].src
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/env/ssl-cainfo.env
               sha256: 5591b36910545a622cf50dd1cea3f9ddf1aafbef9ece35b69b2bd110293356c3
               type: resource
-              fetched_at: 2026-09-02T22:03:28.718576Z
+              fetched_at: 2026-09-02T22:03:28.705493Z
             - field: overlays[0].host_files[0].src
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/env/github/code.env
               sha256: 44d1b46bcfae2a1c8f2ed193e044b1bc889ba0c1067bb4b9e1705ef3cfdcaae8
               type: resource
-              fetched_at: 2026-09-02T22:03:28.919309Z
+              fetched_at: 2026-09-02T22:03:28.904794Z
             - field: overlays[1].host_files[0].src
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/env/gitlab/code.env
               sha256: cb656a49f796485a68e2e84422675b69d4e06ab89508c0de81a0e19dcdfb09f2
               type: resource
-              fetched_at: 2026-09-02T22:03:29.121925Z
+              fetched_at: 2026-09-02T22:03:29.105603Z
             - field: openshell.profiles[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-vertex-ai.yaml
               sha256: 71ea4699ec497d4b9592220adf7588019eb8445dbc77af8e0e6767e68dcb5585
               type: resource
-              fetched_at: 2026-09-02T22:03:29.202656Z
+              fetched_at: 2026-09-02T22:03:29.188985Z
             - field: openshell.profiles[1]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-package-registries.yaml
               sha256: 11145398bf99cab4bb434070c03788c036a9bd54faa466c97805658864714b9b
               type: resource
-              fetched_at: 2026-09-02T22:03:29.616193Z
+              fetched_at: 2026-09-02T22:03:29.60296Z
             - field: openshell.profiles[2]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-gitleaks.yaml
               sha256: ce64b2220e1f157eebfd563f30ede594d8489f8644e48cbc6cf359f16c073e87
               type: resource
-              fetched_at: 2026-09-02T22:03:29.838871Z
+              fetched_at: 2026-09-02T22:03:29.82488Z
             - field: overlays[0].openshell.profiles[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-github-code.yaml
               sha256: fbf60c6f1bd2f180bba238460546550cbe3f7871ba3e17007e552e0da41083cd
               type: resource
-              fetched_at: 2026-09-02T22:03:30.026022Z
+              fetched_at: 2026-09-02T22:03:30.011942Z
             - field: overlays[1].openshell.profiles[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-gitlab-code.yaml
               sha256: c12e7749f310b96f5bad44ecdd137ff3cf2701bacca10fd051aa7b71cd09fc7e
               type: resource
-              fetched_at: 2026-09-02T22:03:30.214622Z
+              fetched_at: 2026-09-02T22:03:30.201865Z
             - field: providers[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/providers/vertex-ai.yaml
               sha256: ae5ebe527e5d7b0fa6994346fde3f6ba11b632a3ba78ece96591b5ed85083ec1
               type: resource
-              fetched_at: 2026-09-02T22:03:30.426662Z
+              fetched_at: 2026-09-02T22:03:30.413993Z
             - field: providers[1]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/providers/package-registries.yaml
               sha256: 07df296df76b9c28322b4e66e55c462f10b583d57fd166799aef45ec996b6028
               type: resource
-              fetched_at: 2026-09-02T22:03:30.640786Z
+              fetched_at: 2026-09-02T22:03:30.628107Z
             - field: providers[2]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/providers/gitleaks.yaml
               sha256: 39670a6a1f76fea82abc70e6bf7f345952acf03fb074489dc9590ad54888488a
               type: resource
-              fetched_at: 2026-09-02T22:03:30.910428Z
+              fetched_at: 2026-09-02T22:03:30.89567Z
             - field: overlays[0].providers[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/providers/github-code.yaml
               sha256: 03c5bdadeb1cb069fc1fb761ea7e95f8201a207f6b9753484215927b2dd4a8d0
               type: resource
-              fetched_at: 2026-09-02T22:03:31.102763Z
+              fetched_at: 2026-09-02T22:03:31.088622Z
             - field: overlays[1].providers[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/providers/gitlab-code.yaml
               sha256: e19dcec443432edef69c3c2b33a1bfd17e24ec49328c2a9220ef73abc7ef9b8c
               type: resource
-              fetched_at: 2026-09-02T22:03:31.293619Z
+              fetched_at: 2026-09-02T22:03:31.280567Z
             - field: plugins[0]
               url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/plugins/gopls-lsp/plugin.json
               sha256: 489be6d59cd26c4c67946e885bf7931cc261d59e20035967f36b6c3d04976652
@@ -954,7 +954,7 @@ harnesses:
                   sha256: 1ffcba39aceff0200bd3e687b0c122efcda4a56c5247207d54c20cb68c5e338e
                 - path: plugin.json
                   sha256: aaf60aabcff7de402646e77f9887668ab88589724580a2442d50bc4d5327ccf6
-              fetched_at: 2026-09-02T22:03:33.213548Z
+              fetched_at: 2026-09-02T22:03:33.204474Z
             - field: skills[1]
               url: https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-ff-change
               sha256: 683d4636797fa133c029f7e7b491186d9842421bf91f49bcc990239fc4ddfbe9
