@@ -5,10 +5,14 @@
 # /fs-code stays on the built-in stage router (this trigger is Jira-only
 # so the two paths do not double-fire).
 #
-# Vendored skills are the one-shot pair from redhat-developer/rhdh-skills
-# @305f8283d4774ba07fd6bbf0bbceb7a12d509380 (openspec-ff-change +
-# openspec-apply-change + rhdh-spec-driven-schema). Interactive skills
-# (new-change, continue) are intentionally omitted — they stop mid-run.
+# Skills are URL-pinned from redhat-developer/rhdh-skills (not vendored).
+# One-shot pair only: ff-change then apply-change. Interactive skills
+# (new-change, continue) are omitted — they stop mid-run.
+# rhdh-spec-driven-schema is required by those skills (lives under
+# skills/reference, not skills/refinement).
+#
+# Harness-level allowed_remote_resources is required for URL skills
+# (not inherited from base or config.yaml).
 
 base: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/harness/code.yaml#sha256=4f0d9425d5ee1fa86e21d3b6d1ac9bd086da2f59de9d80a311f753c00d99303d
 
@@ -16,9 +20,12 @@ agent: custom/agents/code.md
 model: claude-opus-4-6
 
 skills:
-  - custom/skills/openspec-ff-change
-  - custom/skills/openspec-apply-change
-  - custom/skills/rhdh-spec-driven-schema
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-ff-change#sha256=683d4636797fa133c029f7e7b491186d9842421bf91f49bcc990239fc4ddfbe9
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/refinement/openspec-apply-change#sha256=b86936803b684ea7fed4e8dc91a4ecb7713aad04a4f5ca9d948c3cda75b7c501
+  - https://github.com/redhat-developer/rhdh-skills/tree/305f8283d4774ba07fd6bbf0bbceb7a12d509380/skills/reference/rhdh-spec-driven-schema#sha256=1fff2f2f5e4e6f9d89d2a8fc1bca206db825d8f7d8edebe2f3661740ceb458cd
+
+allowed_remote_resources:
+  - https://github.com/redhat-developer/rhdh-skills/
 
 openshell:
   profiles:
