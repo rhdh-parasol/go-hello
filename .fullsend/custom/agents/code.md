@@ -61,8 +61,9 @@ Do not invent a ticket.
 
 ## OpenSpec (do this before product code)
 
-This repo already has `openspec/config.yaml` and
-`openspec/schemas/rhdh-spec-driven/`. Do **not** reinstall the schema.
+If `openspec/config.yaml` or `openspec/schemas/rhdh-spec-driven/` is missing,
+follow `rhdh-spec-driven-schema` and run its project-install step, then
+continue. Do not stop after install.
 
 Follow `openspec-ff-change` then `openspec-apply-change` in **one run**.
 This is not an interactive `/opsx` session:

@@ -9,7 +9,8 @@
 # One-shot pair only: ff-change then apply-change. Interactive skills
 # (new-change, continue) are omitted — they stop mid-run.
 # rhdh-spec-driven-schema is required by those skills (lives under
-# skills/reference, not skills/refinement).
+# skills/reference, not skills/refinement). First /fs-code run installs
+# the schema into openspec/ via that skill — do not vendor it here.
 #
 # Harness-level allowed_remote_resources is required for URL skills
 # (not inherited from base or config.yaml).
