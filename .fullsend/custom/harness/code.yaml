@@ -14,8 +14,12 @@
 #
 # Harness-level allowed_remote_resources is required for URL skills
 # (not inherited from base or config.yaml).
+#
+# Base pin is agents#1117 (ba1d46fb): same code.yaml as c4e059f9, but
+# the inherited fullsend-vertex-ai profile allows **/claude.exe.
+# A sibling claude-exe profile does not extend `_provider_vertex_ai`.
 
-base: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/harness/code.yaml#sha256=4f0d9425d5ee1fa86e21d3b6d1ac9bd086da2f59de9d80a311f753c00d99303d
+base: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/harness/code.yaml#sha256=4f0d9425d5ee1fa86e21d3b6d1ac9bd086da2f59de9d80a311f753c00d99303d
 
 agent: custom/agents/code.md
 model: claude-opus-4-6
@@ -30,7 +34,6 @@ allowed_remote_resources:
 
 openshell:
   profiles:
-    - custom/profiles/claude-exe.yaml
     - custom/profiles/openspec.yaml
 
 host_files:
