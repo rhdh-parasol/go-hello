@@ -10,9 +10,13 @@
 # Identity reuses the org review GitHub App (no refine mint slug).
 #
 # 0.39 overlay does not copy agents profiles/providers into this repo
-# (PR 17 deleted the vendored copies). Local paths like
-# profiles/fullsend-vertex-ai.yaml 404 at harness-load. Pin the same
-# files the code agent already locks from fullsend-ai/agents.
+# (PR 17 deleted the vendored copies). Pin policy/provider/profile from
+# fullsend-ai/agents. Vertex STS is gated by provider policy
+# `_provider_vertex_ai`, which is built only from the profile whose id
+# is `fullsend-vertex-ai`. A sibling profile (claude-exe) is imported
+# but does not extend that allowlist — OpenShell then DENIED
+# claude.exe -> sts.googleapis.com and Claude reported policy_denied.
+# agents#1117 (ba1d46fb) adds **/claude.exe to that profile.
 #
 # env.runner only lists host vars that reusable-dispatch actually sets.
 # Referencing RUN_URL/REVIEW_TOKEN/ISSUE_NUMBER here fails validation before
@@ -35,8 +39,7 @@ providers:
 
 openshell:
   profiles:
-    - https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/profiles/fullsend-vertex-ai.yaml#sha256=1bd763964e48c695aadc9219a169bafb714db10b560abef3e56157dd5d180338
-    - custom/profiles/claude-exe.yaml
+    - https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-vertex-ai.yaml#sha256=71ea4699ec497d4b9592220adf7588019eb8445dbc77af8e0e6767e68dcb5585
 
 # URL policy/provider/profile need the harness allowlist (not inherited from
 # config.yaml). Prefix must match config.yaml allowed_remote_resources.
