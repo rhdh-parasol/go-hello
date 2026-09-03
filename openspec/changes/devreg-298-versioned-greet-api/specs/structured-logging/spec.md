@@ -2,7 +2,7 @@
 
 ### Requirement: Every request produces one structured JSON log line
 
-The server SHALL emit exactly one JSON log line to stdout per HTTP request, parseable by `jq`. Each log line MUST contain at minimum: `ts` (RFC 3339 timestamp), `level` (info or error), `method`, `path`, `status` (integer HTTP status code), `duration_ms` (float, milliseconds), and `request_id`.
+The server SHALL emit exactly one JSON log line to stdout per HTTP request, parseable by `jq`. Each log line MUST contain at minimum: `ts` (RFC 3339 timestamp), `level` ("info" for status < 500, "error" for status ≥ 500), `method`, `path`, `status` (integer HTTP status code), `duration_ms` (float, milliseconds), and `request_id`.
 
 #### Scenario: Successful request log line
 
@@ -12,7 +12,7 @@ The server SHALL emit exactly one JSON log line to stdout per HTTP request, pars
 #### Scenario: Failed request log line
 
 - **WHEN** a client sends `POST /v1/greet` with invalid input and receives a 400 response
-- **THEN** stdout contains one JSON line with all seven required fields, where `status` is 400
+- **THEN** stdout contains one JSON line with all seven required fields, where `status` is 400 and `level` is "info"
 
 #### Scenario: Log line is valid JSON
 

@@ -9,10 +9,10 @@ The server SHALL expose a `GET /live` endpoint that returns HTTP 200 with `Conte
 - **WHEN** a client sends `GET /live` while the server is running
 - **THEN** the server responds with status 200 and a JSON body containing `"status":"ok"`
 
-#### Scenario: Liveness probe succeeds after shutdown signal
+#### Scenario: Liveness probe succeeds for in-flight request during shutdown
 
-- **WHEN** a client sends `GET /live` after the server has received SIGTERM
-- **THEN** the server responds with status 200 (while still draining in-flight requests)
+- **WHEN** a `GET /live` request is already in-flight when the server receives SIGTERM
+- **THEN** the server responds with status 200 on that existing connection (new TCP connections are refused once the listener closes)
 
 ### Requirement: GET /ready returns 200 only while accepting traffic
 

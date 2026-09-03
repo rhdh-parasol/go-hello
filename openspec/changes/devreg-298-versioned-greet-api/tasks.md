@@ -8,7 +8,7 @@
 
 ## 2. POST /v1/greet Endpoint
 
-- [ ] 2.1 Add `v1GreetHandler` for `POST /v1/greet`: parse JSON body `{"name":"..."}`, trim whitespace, validate name is 1–64 chars after trimming, return `{"message":"Hello, <name>!", "name":"<name>"}` on 200, or `{"error":"validation_error", "message":"<reason>"}` on 400 for empty/too-long name, missing body, malformed JSON, or missing `name` field.
+- [ ] 2.1 Add `v1GreetHandler` for `POST /v1/greet`: parse JSON body `{"name":"..."}`, trim whitespace, validate name is 1–64 chars after trimming, return `{"message":"Hello, <name>!", "name":"<name>"}` on 200, or `{"error":"validation_error", "message":"<reason>"}` on 400 for empty/too-long name, missing body, malformed JSON, missing `name` field, or wrong `Content-Type`.
 - [ ] 2.2 Register `POST /v1/greet` on the mux alongside existing routes. Ensure `GET /greet` remains unchanged.
 - [ ] 2.3 Write unit tests covering: valid name, trimmed name, empty name, whitespace-only name, name exceeding 64 chars, missing body, malformed JSON, missing `name` field, wrong Content-Type, existing `GET /greet` with and without query param still works.
 
