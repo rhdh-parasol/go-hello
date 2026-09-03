@@ -1001,6 +1001,36 @@ harnesses:
                 - path: scripts/install_project_schema.py
                   sha256: a2656ea6391138adf3f32c7f7a8ae96c6b92a15200c48b8c74fbf5b63023dfe9
               fetched_at: 2026-09-02T21:27:58.293324Z
+    grillme:
+        source: harness/grillme.yaml
+        sha256: adfecb4a56847573966f2d73026ac94277fa80e11de093144a61e4c29876ae72
+        resolved_at: 2026-09-03T04:18:43.138511Z
+        dependencies:
+            - field: policy
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/policies/base.yaml
+              sha256: 3ed634401d87a1327fffe5e266272d930321484ce8a91dfa5fe447d4f2e00470
+              type: file
+              fetched_at: 2026-09-02T22:03:22.307814Z
+            - field: openshell.profiles[0]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-vertex-ai.yaml
+              sha256: 71ea4699ec497d4b9592220adf7588019eb8445dbc77af8e0e6767e68dcb5585
+              type: file
+              fetched_at: 2026-09-02T22:03:29.188985Z
+            - field: openshell.profiles[1]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/ba1d46fb30329283a092fc30d53cf68e99e5ce86/profiles/fullsend-github-ro.yaml
+              sha256: ceea92ccf7698db783d764b8680dfd683933f8b02a2c0321fbf771023efc47c6
+              type: file
+              fetched_at: 2026-09-03T04:18:42.899801Z
+            - field: providers[0]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/providers/vertex-ai.yaml
+              sha256: ae5ebe527e5d7b0fa6994346fde3f6ba11b632a3ba78ece96591b5ed85083ec1
+              type: file
+              fetched_at: 2026-09-02T22:03:30.413993Z
+            - field: providers[1]
+              url: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/providers/github-ro.yaml
+              sha256: f4678aa328deea8653d15691d32d9f03fc9aba92ee8383bac7f4a03993739360
+              type: file
+              fetched_at: 2026-09-03T04:18:43.135578Z
     refine:
         source: harness/refine.yaml
         sha256: 8fc6069e2f12e559972425a9c9a2c6992bd8e074d5c10d0a3c8d387ee1ea35d0
