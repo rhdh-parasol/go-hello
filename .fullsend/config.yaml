@@ -23,6 +23,9 @@ agents:
     - name: code
       source: custom/harness/code.yaml
       model: claude-opus-4-6
+    - name: grillme
+      source: custom/harness/grillme.yaml
+      model: claude-opus-4-6
 allowed_remote_resources:
     - https://raw.githubusercontent.com/fullsend-ai/fullsend/
     - https://raw.githubusercontent.com/fullsend-ai/agents/
