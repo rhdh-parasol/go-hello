@@ -67,7 +67,7 @@ No canonical document updates. No existing PRD, ADR, or long-lived capability sp
 
 ## Risks / Trade-offs
 
-- **[`log/slog` output format]** `slog.NewJSONHandler` field names differ from some log aggregators' defaults (e.g., `time` vs `ts`). → Mitigation: Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` → `ts`, ensuring the spec-required field names.
+- **[`log/slog` output format]** `slog.NewJSONHandler` field names and values differ from the spec defaults (e.g., `time` vs `ts`, uppercase `"INFO"` vs lowercase `"info"`). → Mitigation: Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` → `ts` and to lowercase the `level` value via `strings.ToLower`, ensuring the spec-required field names and values.
 
 - **[Shutdown race on readiness flip]** A request arriving between the signal and the readiness flag flip could see a 200 from `/ready` then immediately get connection-refused. → Mitigation: Flip the atomic flag before calling `Server.Shutdown`; the window is negligible in practice.
 

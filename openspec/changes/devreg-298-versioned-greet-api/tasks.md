@@ -2,7 +2,7 @@
 
 ## 1. Structured Logging Foundation
 
-- [ ] 1.1 Add logging middleware with `log/slog` JSON handler: create `loggingMiddleware` function that wraps `http.Handler`, generates a 16-byte hex request ID via `crypto/rand`, sets `X-Request-ID` response header, captures status code with a `responseWriter` wrapper, and emits one JSON log line per request with fields `ts`, `level`, `method`, `path`, `status`, `duration_ms`, `request_id`. Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` to `ts`.
+- [ ] 1.1 Add logging middleware with `log/slog` JSON handler: create `loggingMiddleware` function that wraps `http.Handler`, generates a 16-byte hex request ID via `crypto/rand`, sets `X-Request-ID` response header, captures status code with a `responseWriter` wrapper, and emits one JSON log line per request with fields `ts`, `level`, `method`, `path`, `status`, `duration_ms`, `request_id`. Use `slog.HandlerOptions` with `ReplaceAttr` to rename `time` to `ts` and to lowercase the `level` value via `strings.ToLower` (slog defaults to uppercase `"INFO"`/`"ERROR"` but the spec requires lowercase).
 - [ ] 1.2 Replace `log.Printf` startup message with structured JSON via `slog`, including `ts`, `level` ("info"), and `msg` indicating the listening address.
 - [ ] 1.3 Write unit tests verifying: log output is valid JSON with all seven required fields; `request_id` in log matches `X-Request-ID` response header; startup log is structured JSON.
 
