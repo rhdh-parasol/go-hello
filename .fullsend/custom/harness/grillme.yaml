@@ -23,7 +23,7 @@
 # before the agent starts. Post-script falls back GH_TOKEN for writes.
 
 agent: custom/agents/grillme.md
-image: ghcr.io/fullsend-ai/fullsend-code:latest
+image: ghcr.io/fullsend-ai/fullsend-code:0.57.1
 policy: https://raw.githubusercontent.com/fullsend-ai/agents/c4e059f9f2b8c48e13b3845992b9b774d41b5de7/policies/base.yaml#sha256=3ed634401d87a1327fffe5e266272d930321484ce8a91dfa5fe447d4f2e00470
 readonly_repo: true
 
